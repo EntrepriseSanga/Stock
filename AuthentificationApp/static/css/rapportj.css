@@ -1,0 +1,118 @@
+/* Style de base pour le conteneur général */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+}
+/* Titres principaux */
+h2, h3 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+    
+}
+
+/* Stylisation de la date */
+p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Table des produits vendus */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+/* Style de l'en-tête du tableau */
+table thead {
+    background-color: #333;
+    color: white;
+}
+
+/* Cellules d'en-tête */
+table th {
+    padding: 12px;
+    text-align: left;
+}
+
+/* Cellules du corps */
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Couleur alternée des lignes du tableau */
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Bouton de téléchargement PDF */
+form button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Changement de couleur au survol du bouton */
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Responsivité : styles pour écrans de moins de 768px */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    table, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    /* En-tête du tableau pour les petits écrans */
+    thead {
+        display: none;
+    }
+
+    /* Style pour chaque cellule de la table en format mobile */
+    tbody tr {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    tbody td {
+        display: block;
+        text-align: right;
+        font-size: 1rem;
+    }
+
+    /* Afficher le nom du produit avant les autres données */
+    tbody td:first-child {
+        text-align: left;
+        font-weight: bold;
+        color: #333;
+    }
+}

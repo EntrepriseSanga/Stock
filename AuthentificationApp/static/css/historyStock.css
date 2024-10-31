@@ -1,0 +1,67 @@
+/* Style général pour le conteneur */
+.container {
+    max-width: 1200px; /* Limite la largeur maximale pour de grandes écrans */
+    margin: 0 auto; /* Centre le conteneur */
+    padding: 20px; /* Ajoute du padding autour du conteneur */
+}
+
+/* Style pour le titre */
+h1 {
+    text-align: center; /* Centre le titre */
+    color: #333; /* Couleur du texte */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+}
+
+/* Style pour la table */
+.table {
+    width: 100%; /* Remplit tout l'espace disponible */
+    border-collapse: collapse; /* Supprime les espaces entre les bordures */
+}
+
+/* Style pour l'en-tête de la table */
+.table th {
+    background-color: #007bff; /* Couleur de fond des en-têtes */
+    color: white; /* Couleur du texte des en-têtes */
+    padding: 10px; /* Padding pour les cellules d'en-tête */
+    text-align: left; /* Alignement à gauche */
+}
+
+/* Style pour les cellules de la table */
+.table td {
+    border: 1px solid #ddd; /* Bordure pour les cellules */
+    padding: 10px; /* Padding pour les cellules */
+}
+
+/* Style pour les lignes de la table */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9; /* Couleur de fond pour les lignes impaires */
+}
+
+/* Style pour les messages vides */
+.table tbody tr td {
+    text-align: center; /* Centre le texte pour les messages vides */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    /* Ajustements pour les écrans de moins de 768px */
+    .table {
+        display: block; /* Permet le défilement horizontal */
+        overflow-x: auto; /* Ajoute une barre de défilement si nécessaire */
+    }
+    .table th, .table td {
+        display: block; /* Chaque cellule devient un bloc */
+        text-align: right; /* Aligne le texte à droite */
+        padding: 8px; /* Réduit le padding */
+    }
+    .table th {
+        text-align: left; /* Aligne le texte à gauche pour les en-têtes */
+        background-color: transparent; /* Supprime la couleur de fond pour les en-têtes */
+        position: relative; /* Permet de superposer le texte */
+    }
+    .table td::before {
+        content: attr(data-label); /* Utilise un attribut data pour afficher le nom de la colonne */
+        float: left; /* Aligne à gauche */
+        font-weight: bold; /* Met en gras */
+    }
+}

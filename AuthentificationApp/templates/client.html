@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/client.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Liste des Clients (par nombre d'achats)</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nom du Client</th>
+                <th>Crédit</th>
+                <th>Nombre d'Achats</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td data-label="Nom du Client">{{ client.nom }}</td>
+                <td data-label="Nom du Client">{{ client.total_credit }}</td>
+                <td data-label="Nombre d'Achats">{{ client.nombre_achats }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">Aucun client trouvé.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Section pour l'histogramme -->
+    <div>
+        <h2>Statistiques des Achats (Histogramme)</h2>
+        <canvas id="clientsChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Extraire les données des clients depuis le template Django
+    var clients = [
+        {% for client in clients %}
+            { "nom": "{{ client.nom }}", "nombre_achats": {{ client.nombre_achats }} }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    var labels = clients.map(client => client.nom);
+    var data = clients.map(client => client.nombre_achats);
+
+    // Configuration de l'histogramme
+    var ctx = document.getElementById('clientsChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Nombre d\'achats',
+                data: data,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+ 

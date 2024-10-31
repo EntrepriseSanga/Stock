@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/historique.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Historique des Ventes</h2>
+    
+    {% for vente in ventes %}
+        <div class="vente">
+            <p>Date : {{ vente.date_vente|date:"d/m/Y H:i" }}</p>
+            <p>Client : {{ vente.client.nom }} ({{ vente.client.telephone }})</p>
+            <p>Total encaissé : {{ vente.total_encaisse }} €</p>
+            <p>Type de paiement : {{ vente.get_type_paiement_display }}</p>
+            <p>Utilisateur : {{ vente.utilisateur.username }}</p>
+            <a href="{% url 'historique_detail' vente.id %}" class="btn btn-info">Détail</a>
+            <hr>
+        </div>
+    {% empty %}
+        <p>Aucune vente trouvée.</p>
+    {% endfor %}
+</div>
+{% endblock %}

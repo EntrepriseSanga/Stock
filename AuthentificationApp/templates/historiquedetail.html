@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/historiquedetail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Détails de la vente</h1>
+
+    <!-- En-tête de la vente -->
+    <div class="vente-header">
+        <div class="vente-left">
+            <p>Date : {{ vente.date_vente|date:"d/m/Y" }}</p>
+            <p>Type de vente : {{ vente.get_type_paiement_display }}</p>
+        </div>
+        <div class="vente-right">
+            <p>Utilisateur : {{ vente.utilisateur.username }}</p>
+            <p>Client : {{ vente.client.nom }} ({{ vente.client.telephone }})</p>
+        </div>
+    </div>
+
+    <!-- Détails des produits vendus -->
+    <div class="vente-details">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix Unitaire</th>
+                    <th>Quantité Vendue</th>
+                    <th>Rabais</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produits %}
+                <tr>
+                    <td>{{ produit.produit.nom }}</td>
+                    <td>{{ produit.produit.prix_unitaire }} €</td>
+                    <td>{{ produit.quantite_vendue }}</td>
+                    <td>{{ produit.rabais_produit }} €</td>
+                    <td>{{ produit.prix_total }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Section des totaux -->
+    <div class="total-section">
+        <p>Rabais total : {{ vente.total_rabais }} €</p>
+        <p>Total encaissé : {{ vente.total_encaisse }} €</p>
+    </div>
+
+    <!-- Bouton de retour -->
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" formaction="{% url 'historique' %}" class="btn btn-secondary">Retour à l'historique</button>
+    </form>
+</div>
+{% endblock %}

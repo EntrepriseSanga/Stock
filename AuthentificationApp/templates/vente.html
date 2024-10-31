@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/vente.css' %}">
+{% endblock %}
+{% block content %}
+<div class="row">
+    <!-- Partie 1 : Recherche et sélection de produits -->
+    <div class="col-md-4">
+        <h2>Recherche de Produits</h2>
+        <input type="text" id="search" class="form-control" placeholder="Rechercher un produit...">
+        <ul id="produit-list" class="list-group mt-2">
+            {% for produit in produits %}
+            <li class="list-group-item">
+                <input type="checkbox" class="produit-checkbox" data-nom="{{ produit.nom }}" data-prix="{{ produit.prix_unitaire }}" data-id="{{ produit.id }}" data-stock="{{ produit.quantite_stock }}">
+                {{ produit.nom }} ({{ produit.quantite_stock }} en stock)
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Partie 2 : Produits sélectionnés -->
+    <div class="col-md-4">
+        <h2>Produits Sélectionnés</h2>
+        <ul id="selected-produit-list" class="list-group">
+            <!-- Produits sélectionnés s'afficheront ici -->
+        </ul>
+    </div>
+
+    <!-- Partie 3 : Informations Client et Détails Vente -->
+    <div class="col-md-4">
+        <h2>Informations Client et Vente</h2>
+        <form method="POST" id="vente-form">
+            {% csrf_token %}
+            {{ client_form.as_p }}
+            {{ vente_form.as_p }}
+
+            <h3>Produits</h3>
+            <ul id="vente-produit-list" class="list-group">
+                <!-- Produits de la vente s'afficheront ici -->
+            </ul>
+
+            <h3>Total à Encaisser: <span id="total-encaisse">0</span> €</h3>
+            <button type="submit" class="btn btn-primary">Enregistrer Vente</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const produitCheckboxes = document.querySelectorAll('.produit-checkbox');
+    const selectedProduitList = document.getElementById('selected-produit-list');
+    const venteProduitList = document.getElementById('vente-produit-list');
+    const totalEncaisseElement = document.getElementById('total-encaisse');
+
+    // Fonctionnalité de recherche
+    const searchInput = document.getElementById('search');
+    const produitList = document.getElementById('produit-list');
+
+    searchInput.addEventListener('input', function() {
+        const filter = this.value.toLowerCase();
+        const items = produitList.getElementsByTagName('li');
+
+        Array.from(items).forEach(item => {
+            const checkbox = item.querySelector('.produit-checkbox');
+            const produitName = checkbox.dataset.nom.toLowerCase();
+            item.style.display = produitName.includes(filter) ? "" : "none";
+        });
+    });
+
+    produitCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const nom = this.dataset.nom;
+            const prixUnitaire = parseFloat(this.dataset.prix);
+            const id = this.dataset.id;
+            const stock = parseInt(this.dataset.stock);
+
+            if (this.checked) {
+                // Ajouter produit dans les produits sélectionnés
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.innerHTML = `
+                    ${nom} - Stock: ${stock}
+                    <input type="number" min="1" max="${stock}" class="quantite-input" data-id="${id}" data-prix="${prixUnitaire}" data-stock="${stock}" placeholder="Quantité">
+                `;
+                selectedProduitList.appendChild(listItem);
+
+                // Ajouter produit dans les produits de la vente
+                const venteItem = document.createElement('li');
+                venteItem.className = 'list-group-item';
+                venteItem.innerHTML = `
+                    ${nom} - Prix Unitaire: ${prixUnitaire} €
+                    <input type="number" class="rabais-input" data-id="${id}" placeholder="Rabais">
+                    <span class="prix-total">0.00</span> €
+                `;
+                venteProduitList.appendChild(venteItem);
+            } else {
+                removeProductFromList(selectedProduitList, nom);
+                removeProductFromList(venteProduitList, nom);
+            }
+        });
+    });
+
+    // Écoute les changements dans les inputs pour recalculer les prix
+    document.addEventListener('input', function(event) {
+        if (event.target.classList.contains('quantite-input') || event.target.classList.contains('rabais-input')) {
+            updateProductTotal(event.target);
+            calculateTotal();
+        }
+    });
+
+    function updateProductTotal(inputElement) {
+        const id = inputElement.dataset.id;
+        const quantiteInput = selectedProduitList.querySelector(`.quantite-input[data-id="${id}"]`);
+        const quantite = parseFloat(quantiteInput.value) || 0;
+        const prixUnitaire = parseFloat(quantiteInput.dataset.prix);
+        const rabaisInput = venteProduitList.querySelector(`.rabais-input[data-id="${id}"]`);
+        const rabais = parseFloat(rabaisInput.value) || 0;
+        const prixTotalSpan = rabaisInput.nextElementSibling;
+
+        const prixTotal = (prixUnitaire - rabais) * quantite;
+        prixTotalSpan.innerText = prixTotal.toFixed(2);
+    }
+
+    function calculateTotal() {
+        let total = 0;
+        venteProduitList.querySelectorAll('.prix-total').forEach(function(span) {
+            total += parseFloat(span.innerText) || 0;
+        });
+        totalEncaisseElement.innerText = total.toFixed(2);
+    }
+
+    function removeProductFromList(list, productName) {
+        const items = list.querySelectorAll('li');
+        items.forEach(item => {
+            if (item.innerHTML.includes(productName)) {
+                list.removeChild(item);
+            }
+        });
+    }
+
+    // Écouteur d'événements pour le bouton de soumission
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêche la soumission immédiate du formulaire
+
+        let produitsVendus = [];
+        let quantitesVendues = [];
+        let rabaisProduits = [];
+        let prixTotaux = [];
+        let validationErreur = false; // Variable pour suivre les erreurs de validation
+
+        // Récupération des produits sélectionnés et de leurs détails
+        venteProduitList.querySelectorAll('.list-group-item').forEach(function(item) {
+            const rabaisInput = item.querySelector('.rabais-input');
+            const prixTotalSpan = item.querySelector('.prix-total');
+            const id = rabaisInput.dataset.id;
+            const quantiteInput = selectedProduitList.querySelector(`.quantite-input[data-id="${id}"]`);
+
+            const quantite = parseFloat(quantiteInput.value) || 0;
+            const stock = parseInt(quantiteInput.dataset.stock); // Récupérer la quantité en stock
+
+            // Vérification de la quantité saisie par rapport au stock
+            if (quantite > stock/*|| quantite <= 0*/) {
+                validationErreur = true; // Indiquer une erreur de validation
+                //alert(`La quantité pour le produit "${item.innerText.split('-')[0]}" doit être supérieure à 0 et ne pas dépasser ${stock}.`);
+                alert(`La quantité pour le produit "${item.innerText.split('-')[0]}" ne doit pas dépasser ${stock}.`);
+                return; // Sortir de la fonction callback
+            }
+
+            const rabais = parseFloat(rabaisInput.value) || 0;
+            const prixTotal = prixTotalSpan.innerText;
+
+            produitsVendus.push(id);
+            quantitesVendues.push(quantite);
+            rabaisProduits.push(rabais);
+            prixTotaux.push(prixTotal);
+        });
+
+        // Si une erreur de validation a été détectée, ne pas soumettre le formulaire
+        if (validationErreur) {
+            return;
+        }
+
+        // Ajoute les champs au formulaire avant de le soumettre
+        let form = document.getElementById('vente-form');
+        produitsVendus.forEach(function(id, index) {
+            form.appendChild(createHiddenInput('produits_vendus', id));
+            form.appendChild(createHiddenInput('quantites_vendues', quantitesVendues[index]));
+            form.appendChild(createHiddenInput('rabais_produits', rabaisProduits[index]));
+            form.appendChild(createHiddenInput('prix_totaux', prixTotaux[index]));
+        });
+
+        form.submit(); // Soumettre le formulaire
+    });
+
+    function createHiddenInput(name, value) {
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        return input;
+    }
+});
+
+//Bloquer la saisie des nombres négatives
+document.addEventListener('input', function(event) {
+    if (event.target.classList.contains('quantite-input')) {
+        const quantite = parseFloat(event.target.value);
+        if (quantite < 0) {
+            event.target.value = 0; // Remet la valeur à 0 si elle est négative
+            alert("La quantité ne peut pas être négative.");
+        }
+    }
+});
+
+
+    </script>    
+{% endblock %}

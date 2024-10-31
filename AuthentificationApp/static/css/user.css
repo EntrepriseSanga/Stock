@@ -1,0 +1,26 @@
+/* Styles pour écrans moyens */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 24px;
+    }
+
+    table td, table th {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+/* Styles pour petits écrans */
+@media (max-width: 576px) {
+    .table td, .table th {
+        display: block;
+        text-align: right;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}

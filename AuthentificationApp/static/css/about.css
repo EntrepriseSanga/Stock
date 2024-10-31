@@ -1,0 +1,183 @@
+/* about.css */
+
+/* Style pour la section développeurs */
+.developer-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.developer-card:hover {
+    transform: scale(1.05);
+    background-color: #f8f9fa; /* Couleur de fond plus claire au survol */
+}
+
+/* Style pour la section services */
+.service-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.service-card:hover {
+    transform: scale(1.05);
+    background-color: #f1f1f1; /* Changement de couleur au survol */
+}
+
+.service-card i {
+    font-size: 3rem;
+    transition: color 0.3s ease;
+}
+
+/* Changer la couleur de l'icône au survol */
+.service-card:hover i {
+    color: #007bff; /* Changer la couleur de l'icône au survol */
+}
+
+/* about.css */
+
+/* Style pour centrer et animer les développeurs */
+.developer-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-align: center;
+}
+
+.developer-card img {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 5px solid #e1e1e1;
+    transition: border-color 0.3s ease;
+}
+
+.developer-card:hover {
+    transform: scale(1.05);
+    background-color: #f8f9fa;
+}
+
+.developer-card:hover img {
+    border-color: #007bff; /* Changement de la couleur de la bordure au survol */
+}
+
+/* Style pour la section services */
+.service-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-align: center;
+}
+
+.service-card:hover {
+    transform: scale(1.05);
+    background-color: #f1f1f1;
+}
+
+.service-card i {
+    font-size: 3rem;
+    transition: color 0.3s ease;
+}
+
+/* Changer la couleur de l'icône au survol */
+.service-card:hover i {
+    color: #007bff;
+}
+
+/* Effets globaux pour les cartes */
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+
+/* about.css */
+
+/* Style pour la section développeurs */
+.developer-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.developer-card:hover {
+    transform: scale(1.05);
+    background-color: #f8f9fa; /* Couleur de fond plus claire au survol */
+}
+
+/* Style pour la section services */
+.service-card {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.service-card:hover {
+    transform: scale(1.05);
+    background-color: #f1f1f1; /* Changement de couleur au survol */
+}
+
+/* Centrer les icônes des services */
+.service-card i {
+    font-size: 3rem;
+    display: block;
+    margin: 0 auto 20px;
+    transition: color 0.3s ease;
+}
+
+/* Changer la couleur de l'icône au survol */
+.service-card:hover i {
+    color: #007bff; /* Changer la couleur de l'icône au survol */
+}
+
+/* Section développeurs */
+.developer-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+h4 {
+    margin-top: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.container {
+    padding: 30px;
+}
+
+/* Centrage du texte et des éléments */
+.text-center {
+    text-align: center;
+}
+
+/* Transition et mise en valeur des cartes */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Section Nos Services */
+h2 {
+    margin-bottom: 40px;
+}
+
+.service-card h4 {
+    margin-top: 10px;
+    font-size: 1.25rem;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}

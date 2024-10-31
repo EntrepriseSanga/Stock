@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/category.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Gestion des catégories</h2>
+<!-- Bouton pour créer une nouvelle catégorie -->
+<button class="btn btn-success" onclick="toggleCreateCategory()">Créer une nouvelle catégorie</button>
+    <!-- Affichage des catégories -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.nom }}</td>
+                <td>{{ category.description }}</td>
+                <td>
+                    <!-- Bouton Modifier -->
+                    <i class="fas fa-edit" style="cursor:pointer;" onclick="editCategory({{ category.id }}, '{{ category.nom }}', '{{ category.description }}')"></i>
+                    
+                    <!-- Bouton Supprimer -->
+                    <form method="POST" action="{% url 'delete_category' category.id %}" style="display:inline-block;">
+                        {% csrf_token %}
+                        <i class="fas fa-trash-alt" style="cursor:pointer;" onclick="this.closest('form').submit();"></i>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+    <!-- Formulaire de création ou modification de catégorie -->
+    <div id="categoryForm" style="display:none;">
+        <h3 id="formTitle">Créer une catégorie</h3>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="category_id" id="categoryId">
+            {{ form.as_p }}
+            <button type="submit" id="submitButton" name="create_category" class="btn btn-primary">Créer</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleCreateCategory() {
+        document.getElementById("categoryForm").style.display = "block";
+        document.getElementById("formTitle").innerText = "Créer une catégorie";
+        document.getElementById("submitButton").name = "create_category";
+        document.getElementById("categoryId").value = "";
+        document.getElementById("id_nom").value = "";
+        document.getElementById("id_description").value = "";
+    }
+
+    function editCategory(id, nom, description) {
+        document.getElementById("categoryForm").style.display = "block";
+        document.getElementById("formTitle").innerText = "Modifier la catégorie";
+        document.getElementById("submitButton").name = "update_category";
+        document.getElementById("categoryId").value = id;
+        document.getElementById("id_nom").value = nom;
+        document.getElementById("id_description").value = description;
+    }
+</script>
+{% endblock %}

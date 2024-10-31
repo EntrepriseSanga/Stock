@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/listeFacture.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Liste des Factures</h1>
+
+    <!-- Barre de recherche et bouton déroulant pour le filtre -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" id="search-input" class="form-control" placeholder="Rechercher une facture...">
+        </div>
+        <div class="col-md-4">
+            <select id="search-filter" class="form-control">
+                <option value="numero">Numéro de Facture</option>
+                <option value="cnib">CNIB</option> <!-- Ajout de la recherche par CNIB -->
+                <option value="client">Nom du Client</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Table des factures -->
+    <table class="table table-striped" id="facture-table">
+        <thead>
+            <tr>
+                <th>Numéro de facture</th>
+                <th>Date</th>
+                <th>Client</th>
+                <th>CNIB</th> <!-- Ajout de l'en-tête CNIB -->
+                <th>Montant total</th>
+                <th>Rabais</th>
+                <th>Actions</th>
+                <th>Paiement</th>
+                <th>Facture Crédit Payé</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for facture in factures %}
+            <tr>
+                <td class="numero">{{ facture.numero }}</td>
+                <td class="date">{{ facture.vente.date_vente }}</td>
+                <td class="client">{{ facture.vente.client.nom }}</td>
+                <td class="cnib">{{ facture.vente.client.CNIB }}</td> <!-- Ajout de la classe CNIB -->
+                <td>{{ facture.vente.total_encaisse }} f</td>
+                <td>{{ facture.vente.total_rabais }} f</td>
+                <td>
+                    {% if facture.fichier_pdf %}
+                        <a href="{{ facture.fichier_pdf.url }}" class="btn btn-primary" target="_blank">Voir Facture</a>
+                    {% else %}
+                        <span class="text-muted">Pas de facture disponible</span>
+                    {% endif %}
+                </td>
+                <td>
+                     {% if facture.vente.type_paiement == 'credit' %}
+                         <button class="btn btn-success" onclick="confirmerPaiement({{ facture.vente.id }})">Payer</button>
+                     {% endif %}
+                </td>
+                <td>
+                    {% if facture.vente.type_paiement == 'cash' and facture.vente.etait_credits %}
+                        {% if facture.vente.credits_set.exists %}
+                            {% with credit=facture.vente.credits_set.first %}
+                                {% if credit.pdf %}
+                                    <a href="{{ credit.pdf.url }}" class="btn btn-info" target="_blank">Voir</a>
+                                {% else %}
+                                    <span class="text-muted">Pas de facture disponible</span>
+                                {% endif %}
+                            {% endwith %}
+                        {% else %}
+                            <span class="text-muted">Pas de crédit enregistré</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function confirmerPaiement(venteId) {
+    if (confirm("Confirmer le paiement de cette facture ?")) {
+        // Effectuer une requête pour soustraire automatiquement le montant crédité et rediriger vers la liste des factures
+        fetch("{% url 'confirmer_paiement' %}?vente_id=" + venteId, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Paiement enregistré avec succès !");
+                // Rediriger vers la liste des factures
+                window.location.href = "{% url 'liste_factures' %}";
+            } else {
+                alert("Une erreur s'est produite. Veuillez réessayer.");
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert("Une erreur s'est produite. Veuillez réessayer.");
+        });
+    }
+}
+// Filtrer les factures selon la recherche
+document.getElementById('search-input').addEventListener('keyup', function() {
+    const searchTerm = this.value.toLowerCase();
+    const filter = document.getElementById('search-filter').value;
+    const rows = document.querySelectorAll('#facture-table tbody tr');
+
+    rows.forEach(function(row) {
+        let text = row.querySelector(`.${filter}`).textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

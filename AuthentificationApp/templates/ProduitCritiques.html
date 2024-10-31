@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Produits Critiques</h2>
+    
+
+    {% if produits_critiques %}
+    <p class="text-center">Voici la liste des produits à commander.</p>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nom du Produit</th>
+                <th>Prix Unitaire</th>
+                <th>Quantité en Stock</th>
+                <th>Seuil Critique</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits_critiques %}
+            <tr>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.prix_unitaire }}</td>
+                <td>{{ produit.quantite_stock }}</td>
+                <td>{{ produit.seuil_critique }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Bouton de téléchargement du PDF -->
+    <a href="{% url 'telecharger_produits_critiques' %}" class="btn btn-danger">
+        <i class="fa fa-download"></i> Télécharger PDF
+    </a>
+    {% else %}
+    <p class="text-center text-danger">Aucun produit avec un stock critique trouvé.</p>
+    {% endif %}
+</div>
+{% endblock %}

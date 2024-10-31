@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/rapportj.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Rapport de ventes du mois de : {{ mois|date:"F Y" }} </h1>
+    <p>Date : {{ today|date:"d/m/Y" }} </p>
+
+    <h3><u>Produits vendus</u> :</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité vendue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits_vendus %}
+            <tr>
+                <td>{{ produit.produit__nom }}</td>
+                <td>{{ produit.quantite_vendue_mois }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <h4>Chiffre d'affaires total : <b>{{ chiffre_affaire_total }} FCFA</b></h4>
+    <h4>Bénéfice total : <b>{{ benefice_total }} FCFA</b></h4>
+
+    <form method="GET" action="{% url 'rapport_mois' %}">
+        <input type="hidden" name="format" value="pdf">
+        <button type="submit">Télécharger le rapport en PDF</button>
+    </form>
+    
+</div>
+{% endblock %}

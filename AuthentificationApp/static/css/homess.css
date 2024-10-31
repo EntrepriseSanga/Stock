@@ -1,0 +1,156 @@
+/* Styles de base */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.card {
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Couleurs des colonnes contenant les cartes */
+.col-md-3:nth-child(1) .card {
+    background-color: #8fc9f3; /* Bleu clair */
+}
+
+.col-md-3:nth-child(2) .card {
+    background-color: #92f29a; /* Vert clair */
+}
+
+.col-md-3:nth-child(3) .card {
+    background-color: #f5cb88; /* Orange clair */
+}
+
+.col-md-3:nth-child(4) .card {
+    background-color: #f597a5; /* Rouge clair */
+}
+
+/* Effet de survol pour agrandir et changer la couleur */
+.card:hover {
+    transform: scale(1.05);
+    background-color: #f1f1f1;
+}
+
+.card:hover .bi {
+    color: #007bff;
+}
+
+.card i {
+    transition: color 0.3s ease;
+}
+
+h4 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    p {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    h4 {
+        font-size: 1rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}
+
+/* Canvas styling */
+canvas {
+    margin-top: 30px;
+    max-width: 100%;
+    height: auto;
+}
+
+.custom-section {
+    border: 2px solid black; /* Bordure noire */
+    padding: 20px;
+    background-color: #333; /* Fond noir ou sombre */
+    border-radius: 10px;
+}
+
+.custom-section h4 {
+    color: white; /* Couleur du texte en blanc */
+}
+
+.custom-section canvas {
+    background-color: white; /* Optionnel : donner un fond blanc aux graphiques */
+    border: 1px solid black; /* Optionnel : ajouter une bordure aux graphiques */
+}
+
+/* Animation et transformations pour les icônes */
+.icon-animate {
+    transition: transform 0.3s ease, color 0.3s ease; /* Transition pour une transformation douce */
+}
+
+/* Animation de l'icône lors du survol */
+.hover-card:hover .icon-animate {
+    transform: scale(1.2); /* L'icône grandit légèrement */
+    color: #000; /* L'icône change de couleur au survol */
+}
+
+/* Animation du fond de la carte au survol */
+.hover-card:hover {
+    background-color: #f8f9fa; /* Changement de couleur de fond au survol */
+    border: 2px solid #000; /* Bordure noire */
+}
+
+
+/* Animation et transformations pour les icônes */
+.icon-animate {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Animation de l'icône lors du survol */
+.hover-card:hover .icon-animate {
+    transform: scale(1.2);
+    color: #000;
+}
+
+/* Animation du fond de la carte au survol */
+.hover-card:hover {
+    background-color: #f8f9fa;
+    border: 2px solid #000;
+}

@@ -1,0 +1,88 @@
+/* Style général de la page */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Style pour chaque vente */
+.vente {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vente:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.vente p {
+    margin: 10px 0;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.vente hr {
+    margin: 20px 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Bouton de détail */
+.btn-info {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-info:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .vente {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    .vente p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .vente {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .vente p {
+        font-size: 0.9em;
+    }
+
+    .btn-info {
+        padding: 8px 12px;
+    }
+}

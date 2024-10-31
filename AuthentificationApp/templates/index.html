@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Login & Registration Form HTML CSS | Codehal</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <img src="{% static 'images/img.png' %}" alt="">
+        <h2 class="text-right">Bienvenu!!!</h2>
+
+<!-- Formulaire de connexion -->
+<form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <h2>Se connecter</h2>
+    <div class="input-box">
+        <span class="icon">
+            <ion-icon name="person"></ion-icon>
+        </span>
+        {{ form.username }}  <!-- Email ou Nom d'utilisateur -->
+        <label for="username" class="placeholder">Nom d'utilisateur</label>
+    </div>
+    <div class="input-box">
+        <span class="icon">
+            <ion-icon name="lock-closed"></ion-icon>
+        </span>
+        {{ form.password }} <!-- Mot de passe -->
+        <span class="toggle-password">
+            <ion-icon name="eye-outline"></ion-icon>
+        </span>
+        <label for="password" class="placeholder">Mot de passe</label>
+    </div>
+    <button type="submit">Login</button>
+    <!-- Ajout d'un message d'erreur -->
+    <div id="error-message" style="color: red; display: none;"></div>
+</form>
+
+
+
+        <!-- Formulaire d'inscription 
+        <div class="form-wrapper register">
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+                <h2>Registration</h2>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="person"></ion-icon>
+                    </span>
+                    {{ form.username }}   Nom complet 
+                </div>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="mail"></ion-icon>
+                    </span>
+                    {{ form.email }}   Adresse email 
+                </div>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="call"></ion-icon>
+                    </span>
+                    {{ form.telephone }}   Numéro de téléphone
+                </div>
+                 Registration Form (for password1 and password2 fields)
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="lock-closed"></ion-icon>
+                    </span>
+                    {{ form.password1 }}  Mot de passe 
+                    <span class="toggle-password">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </span>
+                </div>
+
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="lock-closed"></ion-icon>
+                    </span>
+                    {{ form.password2 }} <!-- Confirmation mot de passe
+                    <span class="toggle-password">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </span>
+                </div>
+                <button type="submit">Register</button>
+                <div class="sign-link">
+                    <p>Already have an account? <a href="#" onclick="loginActive()">Login</a></p>
+                </div>
+            </form>
+        </div>-->
+    </div>
+
+    <!-- Ionicons pour les icônes -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- JavaScript pour gérer l'affichage du formulaire -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePasswords = document.querySelectorAll('.toggle-password');
+    
+            togglePasswords.forEach(togglePassword => {
+                const passwordField = togglePassword.previousElementSibling;
+    
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+    
+                    // Toggle icon
+                    this.innerHTML = type === 'password' 
+                        ? '<ion-icon name="eye-outline"></ion-icon>' 
+                        : '<ion-icon name="eye-off-outline"></ion-icon>';
+                });
+            });
+    
+            // Affichage du message d'erreur
+            const errorMessage = "{{ error_message }}";
+            if (errorMessage) {
+                const errorDiv = document.getElementById('error-message');
+                errorDiv.innerText = errorMessage;
+                errorDiv.style.display = 'block';  // Affiche le message d'erreur
+            }
+        });
+    </script>
+    
+    
+</body>
+
+</html>

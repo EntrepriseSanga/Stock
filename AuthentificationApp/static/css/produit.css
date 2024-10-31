@@ -1,0 +1,82 @@
+/* Container du formulaire */
+#formulaire-creation, #formulaire-modification {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Titres du formulaire */
+#formulaire-creation h2, #formulaire-modification h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Champs de texte et textareas */
+#formulaire-creation input[type="text"],
+#formulaire-modification input[type="text"],
+#formulaire-creation input[type="number"],
+#formulaire-modification input[type="number"],
+#formulaire-creation textarea,
+#formulaire-modification textarea,
+#formulaire-creation select,
+#formulaire-modification select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+/* Champs au focus */
+#formulaire-creation input[type="text"]:focus,
+#formulaire-modification input[type="text"]:focus,
+#formulaire-creation input[type="number"]:focus,
+#formulaire-modification input[type="number"]:focus,
+#formulaire-creation textarea:focus,
+#formulaire-modification textarea:focus,
+#formulaire-creation select:focus,
+#formulaire-modification select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Boutons */
+#formulaire-creation button,
+#formulaire-modification button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Boutons au survol */
+#formulaire-creation button:hover,
+#formulaire-modification button:hover {
+    background-color: #0056b3;
+}
+
+/* Messages d'erreur (facultatif si tu veux ajouter des styles pour la validation des formulaires) */
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Ajustement pour petits écrans */
+@media (max-width: 768px) {
+    #formulaire-creation, #formulaire-modification {
+        padding: 15px;
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'css/homess.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-5">Dashboard</h1>
+
+    <!-- Section des carrés -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card text-center p-4 hover-card">
+                <i class="fa-solid fa-cart-shopping display-4 text-primary mb-3 icon-animate"></i>
+                <p><i>Ventes</i></p>
+                <p>{{ ventes_journee }}</p>
+            </div>
+        </div>
+        {% if user.is_authenticated and user.role == 'admin' %}   
+            <div class="col-md-3">
+                <div class="card text-center p-4 hover-card">
+                    <i class="fa-solid fa-users display-4 text-success mb-3 icon-animate"></i>
+                    <p><i>Utilisateurs</i></p>
+                    <p>{{ total_utilisateurs }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center p-4 hover-card">
+                    <i class="fa-solid fa-money-bill-wave display-4 text-warning mb-3 icon-animate"></i>
+                    <p><i>Chiffre d'affaires (cash)</i></p>
+                    <p>{{ chiffre_affaire_total }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center p-4 hover-card">
+                    <i class="fa-solid fa-sack-dollar display-4 text-danger mb-3 icon-animate"></i>
+                    <p><i>Bénéfice (cash)</i></p>
+                    <p>{{ benefice_total }}</p>
+                </div>
+            </div>
+        {% endif %}    
+    </div>
+    
+
+    <!-- Histogramme sur le nombre de ventes des produits -->
+    <div class="row mb-5 custom-section">
+        <div class="col-md-6">
+            <h4><i>Histogramme des ventes de produits (cash et crédit) d'aujourd'hui.</i></h4>
+            <canvas id="histogramCanvas"></canvas> <!-- Utilisez Chart.js pour le graphique -->
+        </div>
+    
+        <!-- Diagramme circulaire sur les ventes de la journée -->
+        <div class="col-md-6">
+            <h4><i>Diagramme circulaire des ventes (crédit, cash) d'aujourd'hui. </i></h4>
+            <canvas id="pieChartCanvas"></canvas> <!-- Utilisez Chart.js pour le graphique -->
+        </div>
+    </div>
+    
+</div>
+
+<!-- Ajouter les scripts pour Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Histogramme
+    var ctx = document.getElementById('histogramCanvas').getContext('2d');
+    var histogramChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ produits|safe }}, // Remplacez par vos données
+            datasets: [{
+                label: 'Ventes',
+                data: {{ quantites|safe }}, // Remplacez par vos données
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Diagramme circulaire
+    var pieCtx = document.getElementById('pieChartCanvas').getContext('2d');
+    var pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Cash', 'Crédit'], // Remplacez par vos données
+            datasets: [{
+                label: 'Ventes de la journée',
+                data: [{{ ventes_cash }}, {{ ventes_credit }}], // Remplacez par vos données
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+{% endblock %}

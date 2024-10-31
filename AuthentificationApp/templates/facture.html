@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/facture.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Facture</h1>
+
+    <div class="facture-header">
+        <div class="facture-left">
+            <p>Numéro de Facture : {{ vente.facture.numero }}</p>
+            <p>Date : {{ vente.date_vente|date:"d/m/Y" }}</p>
+            <p>Type de vente : {{ vente.type_paiement }}</p>
+        </div>
+        <div class="facture-right">
+            <p>Utilisateur : {{ vente.utilisateur.username }}</p>
+            <p>Client : {{ vente.client.nom }} ({{ vente.client.telephone }})</p>
+        </div>
+    </div>
+
+    <div class="facture-details">
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix Unitaire</th>
+                    <th>Quantité Vendue</th>
+                    <th>Rabais</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produits_vendus %}
+                <tr>
+                    <td>{{ produit.produit.nom }}</td>
+                    <td>{{ produit.produit.prix_unitaire }}</td>
+                    <td>{{ produit.quantite_vendue }}</td>
+                    <td>{{ produit.rabais_produit }}</td>
+                    <td>{{ produit.prix_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="total-section">
+        <p>Rabais total : {{ vente.total_rabais }}</p>
+        <p>Total encaissé : {{ vente.total_encaisse }}</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button class="download-btn" type="submit">Enregistrer et Télécharger la Facture (PDF)</button>
+    </form>
+</div>
+
+<script>
+    // Empêcher le retour en arrière
+    function preventBack() {
+        window.history.pushState(null, "", window.location.href);
+    }
+
+    window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href);
+    };
+
+    window.onload = preventBack;
+
+    document.querySelector('.download-btn').addEventListener('click', function() {
+        setTimeout(function() {
+            window.location.href = "{% url 'home' %}";
+        }, 1000); // Redirection après 1 seconde
+    });
+</script>
+{% endblock %}

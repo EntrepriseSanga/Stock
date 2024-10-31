@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nom du logiciel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    
+    
+    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Custom CSS -->
+    {% block css %}
+    
+    {% endblock %}
+    
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar" class="js-sidebar">
+            <div class="h-100">
+                <div class="sidebar-logo">
+                    <a href="#">Entréprise Sanga</a>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item">
+                        <a href="{% url 'home' %}" class="sidebar-link">
+                            <i class="fa-solid fa-list pe-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#sales" data-bs-toggle="collapse"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-money-bill-wave pe-2"></i>
+                            Ventes
+                        </a>
+                        <ul id="sales" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="{% url 'creer_vente' %}" class="sidebar-link">Vendre</a>
+                            </li>
+                            
+                            {% if user.role == 'admin' %}
+                            <li class="sidebar-item">
+                                <a href="{% url 'liste_factures' %}" class="sidebar-link">Factures</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{% url 'liste_clients' %}" class="sidebar-link">Clients</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <!-- Section visible uniquement pour les utilisateurs ayant le rôle Admin -->
+                    {% if user.is_authenticated and user.role == 'admin' %}
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link collapsed" data-bs-target="#stock" data-bs-toggle="collapse"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-box pe-2"></i>
+                                Stock
+                            </a>
+                            <ul id="stock" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                                <li class="sidebar-item">
+                                    <a href="{% url 'category_management' %}" class="sidebar-link">Catégories</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{% url 'produits_view' %}" class="sidebar-link">Produits</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a href="{% url 'user_management' %}" class="sidebar-link">
+                                <i class="fa-solid fa-users pe-2"></i>
+                                Users
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link collapsed" data-bs-target="#reports" data-bs-toggle="collapse"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-chart-line pe-2"></i>
+                                Rapports
+                            </a>
+                            <ul id="reports" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                                <li class="sidebar-item">
+
+                                    <a href="{% url 'rapport_jour' %}" class="sidebar-link">Journalier</a>
+                                </li>
+                                <li class="sidebar-item">
+
+                                    <a href="{% url 'rapport_mois' %}" class="sidebar-link">Mensuels</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        
+                        
+
+                        <li class="sidebar-item">
+                            <a href="{% url 'historique' %}" class="sidebar-link">
+                                <i class="fa-solid fa-history pe-2"></i>
+                                Historique Ventes
+                            </a>
+                        </li>
+                        
+                    {% endif %}
+                    <li class="sidebar-item">
+                            <a href="{% url 'produits_critiques' %}" class="sidebar-link">
+                                <i class="fa-solid fa-exclamation-triangle pe-2"></i>
+                                Produits Critiques
+                                {% if nombre_produits_critiques > 0 %}
+                                <span class="badge bg-danger ms-2">{{ nombre_produits_critiques }}</span>
+                                {% endif %}
+                            </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'about_us' %}" class="sidebar-link">
+                            <i class="fa-solid fa-phone pe-2"></i> <!-- Changed to phone icon -->
+                            Contactez-Nous
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="main">
+            <nav class="navbar navbar-expand px-3 border-bottom">
+                <button class="btn" id="sidebar-toggle" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse navbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                <img src="{% static 'images/Aziz.jpeg' %}" class="avatar img-fluid rounded" alt="Profile Image">
+                                <span class="ms-2">{{ user.username }}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                {% if user.role == 'admin' %}
+                                <!--<a href="#" class="dropdown-item">Profile</a>-->
+                                {% endif %}
+                                <a href="{% url 'logout' %}" class="dropdown-item">Déconnecter</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main class="content px-3 py-2">
+                <div class="container-fluid">
+                    
+                    <!-- Main content goes here -->
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </main>
+            <a href="#" class="theme-toggle">
+                <i class="fa-regular fa-moon"></i>
+                <i class="fa-regular fa-sun"></i>
+            </a>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <p class="mb-0">
+                                <a href="#" class="text-muted">
+                                    <strong>Entréprise Sanga</strong>
+                                </a>
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JS dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/cash.js' %}"></script>
+</body>
+</html>
