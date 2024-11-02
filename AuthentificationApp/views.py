@@ -193,6 +193,9 @@ from django.utils import timezone
 def produits_view(request):
     produits = Produit.objects.all()
     categories = CategorieProduit.objects.all()
+    # Calcul des sommes pour le prix d'achat total et le prix de vente total
+    total_prix_achat = produits.aggregate(total=Sum(F('prix_achat') * F('quantite_stock')))['total'] or 0
+    total_prix_vente = produits.aggregate(total=Sum(F('prix_unitaire') * F('quantite_stock')))['total'] or 0
 
     if request.method == 'POST':
         if 'creer_produit' in request.POST:
@@ -226,6 +229,8 @@ def produits_view(request):
     return render(request, 'produit.html', {
         'produits': produits,
         'categories': categories,
+        'total_prix_achat': total_prix_achat,
+        'total_prix_vente': total_prix_vente,
     })
 
 #vente cash

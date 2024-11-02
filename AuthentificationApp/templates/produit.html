@@ -5,7 +5,10 @@
 <link rel="stylesheet" href="{% static 'css/produit.css' %}">
 {% endblock %}
 {% block content %}
-
+<div class="mb-3">
+    <strong>Prix d'achat total :</strong> {{ total_prix_achat }} <br>
+    <strong>Prix de vente total :</strong> {{ total_prix_vente }}
+</div><br>
 <div class="container-fluid">
     <h1>Liste des produits</h1>
     <button class="btn btn-primary" onclick="afficherFormulaireCreation()">Créer nouveau produit</button>
